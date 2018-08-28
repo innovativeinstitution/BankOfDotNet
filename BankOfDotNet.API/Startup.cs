@@ -37,6 +37,14 @@ namespace BankOfDotNet.API
             services.AddDbContext<BankContext>(opts =>
                 opts.UseInMemoryDatabase("BankingDb"));
 
+            services.AddCors(options =>
+    options.AddPolicy("default", policy =>
+        policy.WithOrigins("http://localhost:8080")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+    )
+);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -49,6 +57,8 @@ namespace BankOfDotNet.API
             }
 
             app.UseAuthentication();
+
+            app.UseCors("default");
 
             app.UseMvc();
         }

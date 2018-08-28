@@ -24,7 +24,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+      'vue-mdc-adapter': 'vue-mdc-adapter/dist'
     }
   },
   module: {
@@ -33,7 +34,9 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        include: [resolve('src'), resolve('test')],
+        include: [resolve('src'), resolve('test'),
+        resolve('node_modules/@material'),
+        resolve('node_modules/vue-mdc-adapter')],
         options: {
           formatter: require('eslint-friendly-formatter')
         }
