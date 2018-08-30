@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,15 @@ namespace BankOfDotNet.IdentitySvr
 {
     public class Config
     {
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
+            };
+        }
+
         public static List<TestUser> GetUsers()
         {
             return new List<TestUser>
@@ -38,9 +48,10 @@ namespace BankOfDotNet.IdentitySvr
 
         public static IEnumerable<Client> GetClients()
         {
-            //Client-Credential based grant type
+            
             return new List<Client>
             {
+                //Client-Credential based grant type
                 new Client
                 {
                     ClientId = "client",
@@ -63,6 +74,23 @@ namespace BankOfDotNet.IdentitySvr
                         new Secret("secret".Sha256())
                     },
                     AllowedScopes = { "bankOfDotNetApi" }
+                },
+
+                //Implicit Flow Grant Type
+                new Client
+                {
+                    ClientId = "mvc",
+                    ClientName = "MVC Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+
+                    RedirectUris = { "http://localhost:5003/signin-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:5003/signout-callback-oidc"},
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    }
                 }
             };
         }
