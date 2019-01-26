@@ -57,7 +57,7 @@ namespace BankOfDotNet.IdentitySvr
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            InitializeIdentityServerDatabase(app);
+            //InitializeIdentityServerDatabase(app);
 
             if (env.IsDevelopment())
             {
@@ -74,16 +74,16 @@ namespace BankOfDotNet.IdentitySvr
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                //serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Database.Migrate();
+                //context.Database.Migrate();
 
                 //Seed the data
                 //Seed the clients
-                if(!context.Clients.Any())
+                if(context.Clients.Any())
                 {
-                    foreach (var client in Config.GetClients())
+                    foreach (var client in Config.GetClients().Where(c => c.ClientId == "swaggerapiui"))
                     {
                         context.Clients.Add(client.ToEntity());
                     }
